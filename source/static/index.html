@@ -352,8 +352,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🛡️ ElderGuard - Elderly Fraud Protection System</h1>
-            <p>Smart Fraud Detection to Protect Your Assets</p>
+            <h1>🛡️ ElderGuard</h1>
+            <p>Check if a URL, SMS, or phone call is a scam</p>
         </div>
 
         <div class="tabs">
@@ -382,12 +382,12 @@
         <div class="content-area">
             <!-- URL Check -->
             <div id="url-tab" class="tab-content active">
-                <h2 style="font-size: 1.8em; margin-bottom: 20px;">🔗 URL Safety Check</h2>
+                <h2 style="font-size: 1.8em; margin-bottom: 20px;">🔗 Check a URL</h2>
                 <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">
-                    Paste a link someone sent you or a URL you are unsure about below:
+                    Someone sent you a link and you're not sure if it's safe? Paste it here.
                 </p>
                 <div class="form-group">
-                    <label for="url-input">Enter the URL to check:</label>
+                    <label for="url-input">URL to check:</label>
                     <input type="url" id="url-input" placeholder="e.g. http://example.com" style="font-size: 1.2em;">
                 </div>
                 <button class="btn btn-primary" onclick="checkURL()">
@@ -395,19 +395,19 @@
                 </button>
                 <div id="url-loading" class="loading">
                     <div class="spinner"></div>
-                    <p>Analyzing URL, please wait...</p>
+                    <p>Analyzing...</p>
                 </div>
                 <div id="url-result" class="result-box"></div>
             </div>
 
             <!-- SMS Check -->
             <div id="sms-tab" class="tab-content">
-                <h2 style="font-size: 1.8em; margin-bottom: 20px;">💬 SMS Content Check</h2>
+                <h2 style="font-size: 1.8em; margin-bottom: 20px;">💬 Check an SMS</h2>
                 <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">
-                    Copy and paste the SMS content below. The system will help you determine if it is a scam:
+                    Got a suspicious text message? Paste it here and see if it's a scam.
                 </p>
                 <div class="form-group">
-                    <label for="sms-input">Enter SMS content:</label>
+                    <label for="sms-input">SMS content:</label>
                     <textarea id="sms-input" placeholder="e.g. 【Bank】Your account has suspicious activity, please click the link to verify..."></textarea>
                 </div>
                 <button class="btn btn-primary" onclick="checkSMS()">
@@ -415,16 +415,16 @@
                 </button>
                 <div id="sms-loading" class="loading">
                     <div class="spinner"></div>
-                    <p>Analyzing SMS content, please wait...</p>
+                    <p>Analyzing...</p>
                 </div>
                 <div id="sms-result" class="result-box"></div>
             </div>
 
             <!-- Call Check -->
             <div id="call-tab" class="tab-content">
-                <h2 style="font-size: 1.8em; margin-bottom: 20px;">📞 Call Content Check</h2>
+                <h2 style="font-size: 1.8em; margin-bottom: 20px;">📞 Check a Phone Call</h2>
                 <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">
-                    Write down what the caller said and paste it here for analysis:
+                    Write down what the caller said and paste it here.
                 </p>
                 <div class="form-group">
                     <label for="call-input">Enter call content:</label>
@@ -435,19 +435,19 @@
                 </button>
                 <div id="call-loading" class="loading">
                     <div class="spinner"></div>
-                    <p>Analyzing call content, please wait...</p>
+                    <p>Analyzing...</p>
                 </div>
                 <div id="call-result" class="result-box"></div>
             </div>
 
             <!-- Voice Check -->
             <div id="voice-tab" class="tab-content">
-                <h2 style="font-size: 1.8em; margin-bottom: 20px;">🎤 Voice Deepfake Detection</h2>
+                <h2 style="font-size: 1.8em; margin-bottom: 20px;">🎤 Check an Audio File</h2>
                 <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">
-                    If you received an audio recording, upload it here to check if it is AI-generated:
+                    Got a voice recording that sounds suspicious? Upload it here.
                 </p>
                 <div class="form-group">
-                    <label for="voice-file">Select an audio file:</label>
+                    <label for="voice-file">Choose audio file:</label>
                     <input type="file" id="voice-file" accept="audio/*" style="padding: 15px; font-size: 1.1em;">
                 </div>
                 <button class="btn btn-primary" onclick="checkVoice()">
@@ -455,39 +455,39 @@
                 </button>
                 <div id="voice-loading" class="loading">
                     <div class="spinner"></div>
-                    <p>Analyzing audio file, please wait...</p>
+                    <p>Analyzing...</p>
                 </div>
                 <div id="voice-result" class="result-box"></div>
             </div>
 
             <!-- Anti-Fraud Knowledge -->
             <div id="knowledge-tab" class="tab-content">
-                <h2 style="font-size: 1.8em; margin-bottom: 20px;">📚 Anti-Fraud Knowledge Base</h2>
+                <h2 style="font-size: 1.8em; margin-bottom: 20px;">📚 Know Your Scams</h2>
                 <div class="tip-box">
-                    <h3>⚠️ Common Fraud Tactics</h3>
+                    <h3>⚠️ Common Scams</h3>
                     <ul>
-                        <li><strong>Impersonating Authorities:</strong> Callers claiming to be police or court officials saying you are involved in a case and demanding a transfer of funds</li>
-                        <li><strong>Fake Customer Service:</strong> Scammers posing as Taobao or JD.com customer service, tricking you into transferring money under the guise of a refund</li>
-                        <li><strong>Investment Scams:</strong> Promising high returns to lure victims into investing in fake platforms</li>
-                        <li><strong>Task Scams:</strong> Enticing victims with commissions for completing tasks, then stealing their principal</li>
-                        <li><strong>Impersonating Acquaintances:</strong> Scammers posing as friends or relatives claiming an urgent need for money</li>
+                        <li><strong>Fake cops:</strong> Someone calls saying they're from the police, you're in trouble, and you need to transfer money to a "safe account"</li>
+                        <li><strong>Fake customer service:</strong> "We're from Taobao/JD, your order has an issue, click this link for a refund"</li>
+                        <li><strong>Get-rich-quick:</strong> Promises of huge returns on investments that sound too good to be true</li>
+                        <li><strong>Fake jobs:</strong> "Earn money by completing tasks!" — they take your deposit and disappear</li>
+                        <li><strong>Fake friends:</strong> Someone pretends to be your child or a relative asking for money urgently</li>
                     </ul>
                 </div>
 
                 <div class="tip-box">
-                    <h3>🛡️ Prevention Tips</h3>
+                    <h3>🛡️ Remember</h3>
                     <ul>
-                        <li>Do not trust unknown calls and text messages</li>
-                        <li>Do not click on suspicious links</li>
-                        <li>Do not transfer money to strangers</li>
-                        <li>Never share verification codes or bank card information</li>
-                        <li>Call the police immediately if you encounter anything suspicious</li>
+                        <li>Don't trust calls or texts from strangers</li>
+                        <li>Don't click on links you weren't expecting</li>
+                        <li>Never send money to someone you haven't met in person</li>
+                        <li>Never give out your bank card number or SMS verification codes</li>
+                        <li>When in doubt, call 110</li>
                     </ul>
                 </div>
 
                 <div class="emergency-contact">
-                    <h3>🚨 Emergency Contacts</h3>
-                    <p>If you suspect fraud, call immediately:</p>
+                    <h3>🚨 Need Help?</h3>
+                    <p>If you think you're being scammed, call right now:</p>
                     <p class="phone">📞 110 (Police)</p>
                     <p class="phone">📞 96110 (Anti-Fraud Hotline)</p>
                 </div>
@@ -551,16 +551,16 @@
                 let icon = level === 'danger' ? '🚨' : (level === 'warning' ? '⚠️' : '✅');
 
                 let html = `
-                    <div class="result-title">${icon} ${icon === '🚨' ? 'Danger!' : (icon === '⚠️' ? 'Warning!' : 'Safe')}</div>
+                    <div class="result-title">${icon} ${icon === '🚨' ? 'Danger!' : (icon === '⚠️' ? 'Warning!' : 'Looks Safe')}</div>
                     <div class="result-score">Risk Score: ${result.risk_score}</div>
                     <div class="result-factors">
-                        <h3>Suspicious factors found:</h3>
+                        <h3>What we found:</h3>
                         <ul>
                             ${result.risk_factors.map(f => `<li>${f}</li>`).join('')}
                         </ul>
                     </div>
                     <div class="recommendations">
-                        <h3>Recommendations:</h3>
+                        <h3>What to do:</h3>
                         ${result.recommendations.map(r => `<p>${r}</p>`).join('')}
                     </div>
                 `;
@@ -568,7 +568,7 @@
                 showResult('url-result', html, level);
             } catch (error) {
                 hideLoading('url-loading');
-                showResult('url-result', '<p>Check failed, please try again later</p>', 'warning');
+                showResult('url-result', '<p>Something went wrong. Try again later.</p>', 'warning');
             }
         }
 
@@ -576,7 +576,7 @@
         async function checkSMS() {
             const content = document.getElementById('sms-input').value.trim();
             if (!content) {
-                alert('Please enter SMS content');
+                alert('Paste the SMS content first');
                 return;
             }
 
@@ -597,16 +597,16 @@
                 let icon = level === 'danger' ? '🚨' : (level === 'warning' ? '⚠️' : '✅');
 
                 let html = `
-                    <div class="result-title">${icon} ${result.fraud_category || 'Analysis Complete'}</div>
+                    <div class="result-title">${icon} ${result.fraud_category || 'Done'}</div>
                     <div class="result-score">Risk Score: ${result.risk_score}</div>
                     <div class="result-factors">
-                        <h3>Suspicious factors found:</h3>
+                        <h3>What we found:</h3>
                         <ul>
                             ${result.risk_factors.map(f => `<li>${f}</li>`).join('')}
                         </ul>
                     </div>
                     <div class="recommendations">
-                        <h3>Recommendations:</h3>
+                        <h3>What to do:</h3>
                         ${result.recommendations.map(r => `<p>${r}</p>`).join('')}
                     </div>
                 `;
@@ -614,7 +614,7 @@
                 showResult('sms-result', html, level);
             } catch (error) {
                 hideLoading('sms-loading');
-                showResult('sms-result', '<p>Check failed, please try again later</p>', 'warning');
+                showResult('sms-result', '<p>Something went wrong. Try again later.</p>', 'warning');
             }
         }
 
@@ -622,7 +622,7 @@
         async function checkCall() {
             const content = document.getElementById('call-input').value.trim();
             if (!content) {
-                alert('Please enter call content');
+                alert('Paste the call content first');
                 return;
             }
 
@@ -643,16 +643,16 @@
                 let icon = level === 'danger' ? '🚨' : (level === 'warning' ? '⚠️' : '✅');
 
                 let html = `
-                    <div class="result-title">${icon} ${result.fraud_category || 'Analysis Complete'}</div>
+                    <div class="result-title">${icon} ${result.fraud_category || 'Done'}</div>
                     <div class="result-score">Risk Score: ${result.risk_score}</div>
                     <div class="result-factors">
-                        <h3>Suspicious factors found:</h3>
+                        <h3>What we found:</h3>
                         <ul>
                             ${result.risk_factors.map(f => `<li>${f}</li>`).join('')}
                         </ul>
                     </div>
                     <div class="recommendations">
-                        <h3>Recommendations:</h3>
+                        <h3>What to do:</h3>
                         ${result.recommendations.map(r => `<p>${r}</p>`).join('')}
                     </div>
                 `;
@@ -660,16 +660,16 @@
                 showResult('call-result', html, level);
             } catch (error) {
                 hideLoading('call-loading');
-                showResult('call-result', '<p>Check failed, please try again later</p>', 'warning');
+                showResult('call-result', '<p>Something went wrong. Try again later.</p>', 'warning');
             }
         }
 
-        // Check Voice
+        // Check Voice (placeholder)
         async function checkVoice() {
-            alert('Voice file detection requires an audio processing library. This is a demo version.');
+            alert('Voice check needs audio processing libraries. Not available in this build.');
         }
 
-        // Submit on Enter
+        // Hit Enter to check URL
         document.getElementById('url-input')?.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') checkURL();
         });
