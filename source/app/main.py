@@ -76,7 +76,7 @@ logger.info(f"Static files directory: {STATIC_DIR}")
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
-    description="A multimodal anti-fraud detection system based on large language models, designed specifically for the elderly"
+    description="Scam detection for URLs, SMS, and phone calls. Works with rules or LLMs."
 )
 
 # Configure CORS
@@ -99,7 +99,7 @@ async def health_check():
     return HealthResponse(
         status="ok",
         version=settings.APP_VERSION,
-        message="ElderGuard anti-fraud protection system is running normally"
+        message="ElderGuard is running"
     )
 
 
