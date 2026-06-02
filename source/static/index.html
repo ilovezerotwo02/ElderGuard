@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElderGuard - Elderly Fraud Protection System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 20px;
+            font-size: 1.2em;
+            border: none;
+            background: white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-weight: bold;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .tab-btn.active {
+            background: #ffd700;
+            color: #333;
+        }
+
+        .tab-btn .icon {
+            font-size: 1.5em;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .content-area {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="url"],
+        textarea {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="url"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .btn {
+            padding: 18px 40px;
+            font-size: 1.3em;
+            font-weight: bold;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result-box {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 15px;
+            display: none;
+            font-size: 1.1em;
+        }
+
+        .result-box.safe {
+            background: #d4edda;
+            border: 3px solid #28a745;
+            color: #155724;
+        }
+
+        .result-box.warning {
+            background: #fff3cd;
+            border: 3px solid #ffc107;
+            color: #856404;
+        }
+
+        .result-box.danger {
+            background: #f8d7da;
+            border: 3px solid #dc3545;
+            color: #721c24;
+        }
+
+        .result-box.show {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .result-score {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .result-factors {
+            margin: 20px 0;
+        }
+
+        .result-factors h3 {
+            margin-bottom: 10px;
+        }
+
+        .result-factors ul {
+            margin-left: 20px;
+        }
+
+        .result-factors li {
+            margin: 8px 0;
+        }
+
+        .recommendations {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 10px;
+        }
+
+        .recommendations h3 {
+            margin-bottom: 10px;
+        }
+
+        .recommendations p {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            font-size: 1.2em;
+            display: none;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .emergency-contact {
+            background: #fff3cd;
+            border: 3px solid #ffc107;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .emergency-contact h3 {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            color: #856404;
+        }
+
+        .emergency-contact p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        .emergency-contact .phone {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #dc3545;
+        }
+
+        .knowledge-section {
+            margin-top: 30px;
+        }
+
+        .knowledge-card {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+        }
+
+        .knowledge-card h4 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .knowledge-card p {
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .tip-box {
+            background: #d1ecf1;
+            border: 3px solid #17a2b8;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .tip-box h3 {
+            color: #0c5460;
+            margin-bottom: 15px;
+        }
+
+        .tip-box ul {
+            margin-left: 20px;
+        }
+
+        .tip-box li {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .header p {
+                font-size: 1.1em;
+            }
+
+            .tab-btn {
+                min-width: 100%;
+            }
+
+            .content-area {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ ElderGuard - Elderly Fraud Protection System</h1>
+            <p>Smart Fraud Detection to Protect Your Assets</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('url')">
+                <span class="icon">🔗</span>
+                URL Check
+            </button>
+            <button class="tab-btn" onclick="switchTab('sms')">
+                <span class="icon">💬</span>
+                SMS Check
+            </button>
+            <button class="tab-btn" onclick="switchTab('call')">
+                <span class="icon">📞</span>
+                Call Check
+            </button>
+            <button class="tab-btn" onclick="switchTab('voice')">
+                <span class="icon">🎤</span>
+                Voice Check
+            </button>
+            <button class="tab-btn" onclick="switchTab('knowledge')">
+                <span class="icon">📚</span>
+                Anti-Fraud Knowledge
+            </button>
+        </div>
+
+        <div class="content-area">
+            <!-- URL Check -->
+            <div id="url-tab" class="tab-content active">
+                <h2 style="font-size: 1.8em; margin-bottom: 20px;">🔗 URL Safety Check</h2>
+                <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">
+                    Paste a link someone sent you or a URL you are unsure about below:
+                </p>
+                <div class="form-group">
+                    <label for="url-input">Enter the URL to check:</label>
+                    <input type="url" id="url-input" placeholder="e.g. http://example.com" style="font-size: 1.2em;">
+                </div>
+                <button class="btn btn-primary" onclick="checkURL()">
+                    🔍 Start URL Check
+                </button>
+                <div id="url-loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>Analyzing URL, please wait...</p>
+                </div>
+                <div id="url-result" class="result-box"></div>
+            </div>
+
+            <!-- SMS Check -->
+            <div id="sms-tab" class="tab-content">
+                <h2 style="font-size: 1.8em; margin-bottom: 20px;">💬 SMS Content Check</h2>
+                <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">
+                    Copy and paste the SMS content below. The system will help you determine if it is a scam:
+                </p>
+                <div class="form-group">
+                    <label for="sms-input">Enter SMS content:</label>
+                    <textarea id="sms-input" placeholder="e.g. 【Bank】Your account has suspicious activity, please click the link to verify..."></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="checkSMS()">
+                    🔍 Start SMS Check
+                </button>
+                <div id="sms-loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>Analyzing SMS content, please wait...</p>
+                </div>
+                <div id="sms-result" class="result-box"></div>
+            </div>
+
+            <!-- Call Check -->
+            <div id="call-tab" class="tab-content">
+                <h2 style="font-size: 1.8em; margin-bottom: 20px;">📞 Call Content Check</h2>
+                <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">
+                    Write down what the caller said and paste it here for analysis:
+                </p>
+                <div class="form-group">
+                    <label for="call-input">Enter call content:</label>
+                    <textarea id="call-input" placeholder="e.g. Hello, I am from the Public Security Bureau. You are involved in a money laundering case..."></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="checkCall()">
+                    🔍 Start Call Check
+                </button>
+                <div id="call-loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>Analyzing call content, please wait...</p>
+                </div>
+                <div id="call-result" class="result-box"></div>
+            </div>
+
+            <!-- Voice Check -->
+            <div id="voice-tab" class="tab-content">
+                <h2 style="font-size: 1.8em; margin-bottom: 20px;">🎤 Voice Deepfake Detection</h2>
+                <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">
+                    If you received an audio recording, upload it here to check if it is AI-generated:
+                </p>
+                <div class="form-group">
+                    <label for="voice-file">Select an audio file:</label>
+                    <input type="file" id="voice-file" accept="audio/*" style="padding: 15px; font-size: 1.1em;">
+                </div>
+                <button class="btn btn-primary" onclick="checkVoice()">
+                    🔍 Start Voice Check
+                </button>
+                <div id="voice-loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>Analyzing audio file, please wait...</p>
+                </div>
+                <div id="voice-result" class="result-box"></div>
+            </div>
+
+            <!-- Anti-Fraud Knowledge -->
+            <div id="knowledge-tab" class="tab-content">
+                <h2 style="font-size: 1.8em; margin-bottom: 20px;">📚 Anti-Fraud Knowledge Base</h2>
+                <div class="tip-box">
+                    <h3>⚠️ Common Fraud Tactics</h3>
+                    <ul>
+                        <li><strong>Impersonating Authorities:</strong> Callers claiming to be police or court officials saying you are involved in a case and demanding a transfer of funds</li>
+                        <li><strong>Fake Customer Service:</strong> Scammers posing as Taobao or JD.com customer service, tricking you into transferring money under the guise of a refund</li>
+                        <li><strong>Investment Scams:</strong> Promising high returns to lure victims into investing in fake platforms</li>
+                        <li><strong>Task Scams:</strong> Enticing victims with commissions for completing tasks, then stealing their principal</li>
+                        <li><strong>Impersonating Acquaintances:</strong> Scammers posing as friends or relatives claiming an urgent need for money</li>
+                    </ul>
+                </div>
+
+                <div class="tip-box">
+                    <h3>🛡️ Prevention Tips</h3>
+                    <ul>
+                        <li>Do not trust unknown calls and text messages</li>
+                        <li>Do not click on suspicious links</li>
+                        <li>Do not transfer money to strangers</li>
+                        <li>Never share verification codes or bank card information</li>
+                        <li>Call the police immediately if you encounter anything suspicious</li>
+                    </ul>
+                </div>
+
+                <div class="emergency-contact">
+                    <h3>🚨 Emergency Contacts</h3>
+                    <p>If you suspect fraud, call immediately:</p>
+                    <p class="phone">📞 110 (Police)</p>
+                    <p class="phone">📞 96110 (Anti-Fraud Hotline)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api/v1';
+
+        // Switch tabs
+        function switchTab(tabName) {
+            // Hide all content
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            // Show selected content
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Show result
+        function showResult(resultId, html, level) {
+            const resultBox = document.getElementById(resultId);
+            resultBox.innerHTML = html;
+            resultBox.className = `result-box ${level} show`;
+        }
+
+        // Hide loading indicator
+        function hideLoading(loadingId) {
+            document.getElementById(loadingId).classList.remove('show');
+        }
+
+        // Show loading indicator
+        function showLoading(loadingId) {
+            document.getElementById(loadingId).classList.add('show');
+        }
+
+        // Check URL
+        async function checkURL() {
+            const url = document.getElementById('url-input').value.trim();
+            if (!url) {
+                alert('Please enter a URL to check');
+                return;
+            }
+
+            showLoading('url-loading');
+            document.getElementById('url-result').classList.remove('show');
+
+            try {
+                const response = await fetch(`${API_BASE}/detect/url`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({url: url})
+                });
+
+                const result = await response.json();
+                hideLoading('url-loading');
+
+                let level = result.risk_score >= 60 ? 'danger' : (result.risk_score >= 40 ? 'warning' : 'safe');
+                let icon = level === 'danger' ? '🚨' : (level === 'warning' ? '⚠️' : '✅');
+
+                let html = `
+                    <div class="result-title">${icon} ${icon === '🚨' ? 'Danger!' : (icon === '⚠️' ? 'Warning!' : 'Safe')}</div>
+                    <div class="result-score">Risk Score: ${result.risk_score}</div>
+                    <div class="result-factors">
+                        <h3>Suspicious factors found:</h3>
+                        <ul>
+                            ${result.risk_factors.map(f => `<li>${f}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="recommendations">
+                        <h3>Recommendations:</h3>
+                        ${result.recommendations.map(r => `<p>${r}</p>`).join('')}
+                    </div>
+                `;
+
+                showResult('url-result', html, level);
+            } catch (error) {
+                hideLoading('url-loading');
+                showResult('url-result', '<p>Check failed, please try again later</p>', 'warning');
+            }
+        }
+
+        // Check SMS
+        async function checkSMS() {
+            const content = document.getElementById('sms-input').value.trim();
+            if (!content) {
+                alert('Please enter SMS content');
+                return;
+            }
+
+            showLoading('sms-loading');
+            document.getElementById('sms-result').classList.remove('show');
+
+            try {
+                const response = await fetch(`${API_BASE}/detect/content`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({content: content, content_type: 'sms'})
+                });
+
+                const result = await response.json();
+                hideLoading('sms-loading');
+
+                let level = result.risk_score >= 60 ? 'danger' : (result.risk_score >= 40 ? 'warning' : 'safe');
+                let icon = level === 'danger' ? '🚨' : (level === 'warning' ? '⚠️' : '✅');
+
+                let html = `
+                    <div class="result-title">${icon} ${result.fraud_category || 'Analysis Complete'}</div>
+                    <div class="result-score">Risk Score: ${result.risk_score}</div>
+                    <div class="result-factors">
+                        <h3>Suspicious factors found:</h3>
+                        <ul>
+                            ${result.risk_factors.map(f => `<li>${f}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="recommendations">
+                        <h3>Recommendations:</h3>
+                        ${result.recommendations.map(r => `<p>${r}</p>`).join('')}
+                    </div>
+                `;
+
+                showResult('sms-result', html, level);
+            } catch (error) {
+                hideLoading('sms-loading');
+                showResult('sms-result', '<p>Check failed, please try again later</p>', 'warning');
+            }
+        }
+
+        // Check Call
+        async function checkCall() {
+            const content = document.getElementById('call-input').value.trim();
+            if (!content) {
+                alert('Please enter call content');
+                return;
+            }
+
+            showLoading('call-loading');
+            document.getElementById('call-result').classList.remove('show');
+
+            try {
+                const response = await fetch(`${API_BASE}/detect/content`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({content: content, content_type: 'call'})
+                });
+
+                const result = await response.json();
+                hideLoading('call-loading');
+
+                let level = result.risk_score >= 60 ? 'danger' : (result.risk_score >= 40 ? 'warning' : 'safe');
+                let icon = level === 'danger' ? '🚨' : (level === 'warning' ? '⚠️' : '✅');
+
+                let html = `
+                    <div class="result-title">${icon} ${result.fraud_category || 'Analysis Complete'}</div>
+                    <div class="result-score">Risk Score: ${result.risk_score}</div>
+                    <div class="result-factors">
+                        <h3>Suspicious factors found:</h3>
+                        <ul>
+                            ${result.risk_factors.map(f => `<li>${f}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="recommendations">
+                        <h3>Recommendations:</h3>
+                        ${result.recommendations.map(r => `<p>${r}</p>`).join('')}
+                    </div>
+                `;
+
+                showResult('call-result', html, level);
+            } catch (error) {
+                hideLoading('call-loading');
+                showResult('call-result', '<p>Check failed, please try again later</p>', 'warning');
+            }
+        }
+
+        // Check Voice
+        async function checkVoice() {
+            alert('Voice file detection requires an audio processing library. This is a demo version.');
+        }
+
+        // Submit on Enter
+        document.getElementById('url-input')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkURL();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Configuration - ElderGuard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .config-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .config-section h2 {
+            color: #667eea;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        .help-text {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1em;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        .btn-secondary {
+            background: #28a745;
+            color: white;
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+        .result-box.success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+        .result-box.error {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+        .result-box.show {
+            display: block;
+        }
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .mode-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        .mode-btn:hover {
+            transform: translateY(-2px);
+        }
+        .mode-btn h3 {
+            margin-bottom: 5px;
+        }
+        .mode-btn p {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 System Configuration</h1>
+        <p class="subtitle">Configure your LLM API or use rule-based mode directly</p>
+
+        <!-- Mode Selection -->
+        <div class="config-section">
+            <h2>Step 1: Select Operating Mode</h2>
+            <div class="mode-selector">
+                <div class="mode-btn active" onclick="selectMode('rules')">
+                    <h3>✓ Rule Mode</h3>
+                    <p>Free, no API needed</p>
+                </div>
+                <div class="mode-btn" onclick="selectMode('ollama')">
+                    <h3>🤖 Ollama</h3>
+                    <p>Local AI Model</p>
+                </div>
+                <div class="mode-btn" onclick="selectMode('openai')">
+                    <h3>☁️ OpenAI</h3>
+                    <p>API Key Required</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rule Mode (no config needed) -->
+        <div id="rules-config" class="config-section">
+            <h2>✓ Rule Mode</h2>
+            <p>Enabled! No configuration needed, just click "Save Config".</p>
+            <p style="margin-top: 10px; color: #666;">
+                The system will use built-in keywords and rules for fraud detection, completely free.
+            </p>
+        </div>
+
+        <!-- Ollama Configuration -->
+        <div id="ollama-config" class="config-section" style="display:none;">
+            <h2>🤖 Ollama Configuration</h2>
+            <div class="form-group">
+                <label>Ollama Service URL</label>
+                <p class="help-text">Default is fine unless you changed the Ollama port</p>
+                <input type="text" id="ollama-url" value="http://localhost:11434">
+            </div>
+            <div class="form-group">
+                <label>Model Name</label>
+                <p class="help-text">Run ollama list to see installed models</p>
+                <input type="text" id="ollama-model" placeholder="e.g. deepseek-r1:8b">
+            </div>
+            <p style="color: #666; font-size: 0.9em;">
+                💡 Tip: If you haven't installed Ollama yet, visit <a href="https://ollama.com" target="_blank">ollama.com</a> to download and install it
+            </p>
+        </div>
+
+        <!-- OpenAI Configuration -->
+        <div id="openai-config" class="config-section" style="display:none;">
+            <h2>☁️ OpenAI API Configuration</h2>
+            <div class="form-group">
+                <label>API Key</label>
+                <p class="help-text">Get it from https://platform.openai.com</p>
+                <input type="password" id="openai-key" placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxx">
+            </div>
+            <div class="form-group">
+                <label>API Base URL</label>
+                <p class="help-text">Default or your proxy URL</p>
+                <input type="text" id="openai-base" value="https://api.openai.com/v1">
+            </div>
+            <div class="form-group">
+                <label>Model Name</label>
+                <select id="openai-model">
+                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Cheap)</option>
+                    <option value="gpt-4">GPT-4 (More Accurate)</option>
+                    <option value="gpt-4o">GPT-4o (Latest)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <button class="btn btn-primary" onclick="saveConfig()">💾 Save Config & Generate .env File</button>
+
+        <!-- Result Display -->
+        <div id="result" class="result-box"></div>
+
+        <!-- Start Service -->
+        <div style="margin-top: 30px; text-align: center;">
+            <button class="btn btn-secondary" onclick="startService()">🚀 Click Here to Start Service After Saving</button>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'rules';
+
+        function selectMode(mode) {
+            currentMode = mode;
+
+            // Update button states
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            // Show corresponding config
+            document.getElementById('rules-config').style.display = mode === 'rules' ? 'block' : 'none';
+            document.getElementById('ollama-config').style.display = mode === 'ollama' ? 'block' : 'none';
+            document.getElementById('openai-config').style.display = mode === 'openai' ? 'block' : 'none';
+        }
+
+        function saveConfig() {
+            let config = {
+                mode: currentMode,
+                timestamp: new Date().toISOString()
+            };
+
+            if (currentMode === 'ollama') {
+                config.ollama_url = document.getElementById('ollama-url').value;
+                config.model = document.getElementById('ollama-model').value;
+            } else if (currentMode === 'openai') {
+                config.api_key = document.getElementById('openai-key').value;
+                config.base_url = document.getElementById('openai-base').value;
+                config.model = document.getElementById('openai-model').value;
+            }
+
+            // Send to backend
+            fetch('/api/config', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(config)
+            })
+            .then(res => res.json())
+            .then(data => {
+                showResult('success', '✓ Configuration saved! You can now close this page. The system will run with the new configuration.');
+            })
+            .catch(err => {
+                // If API doesn't exist, generate config text for manual save
+                generateConfigText(config);
+            });
+        }
+
+        function generateConfigText(config) {
+            let text = '# Save the following content to the .env file\n\n';
+
+            if (config.mode === 'rules') {
+                text += 'USE_RULES_ONLY=True\nUSE_OLLAMA=False\n';
+            } else if (config.mode === 'ollama') {
+                text += `USE_RULES_ONLY=False\nUSE_OLLAMA=True\nOLLAMA_BASE_URL=${config.ollama_url}\nOLLAMA_MODEL_NAME=${config.model}\n`;
+            } else if (config.mode === 'openai') {
+                text += `USE_RULES_ONLY=False\nUSE_OLLAMA=False\nOPENAI_API_KEY=${config.api_key}\nOPENAI_API_BASE=${config.base_url}\nLLM_MODEL_NAME=${config.model}\n`;
+            }
+
+            showResult('success',
+                '<h3>✓ Configuration Generated</h3>' +
+                '<p>Please copy the following content and save it to the <code>.env</code> file in the project root directory:</p>' +
+                '<pre style="background:white;padding:15px;border-radius:5px;margin-top:10px;overflow-x:auto;">' + text + '</pre>'
+            );
+        }
+
+        function showResult(type, message) {
+            const resultBox = document.getElementById('result');
+            resultBox.innerHTML = message;
+            resultBox.className = `result-box ${type} show`;
+            resultBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function startService() {
+            alert('Please run in the terminal: python run.py\n\nOr double-click the start.bat file');
+        }
+    </script>
+</body>
+</html>
